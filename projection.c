@@ -6,7 +6,7 @@
 /*   By: rhoorntj <rhoorntj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 13:28:20 by rhoorntj          #+#    #+#             */
-/*   Updated: 2020/01/24 14:42:43 by rhoorntj         ###   ########.fr       */
+/*   Updated: 2020/01/24 15:46:09 by rhoorntj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	iso_x(int x, int y)
 {
 	int x1;
 
-	x1= (x - y) * cos(0.5);
+	x1= (x - y) * cos(0.8);
 	printf("x1 in iso %d\n", x1);
 	return(x1);
 }

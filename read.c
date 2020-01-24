@@ -35,6 +35,12 @@ int	fill_matrix(int *z_line, char *line)
 		i++;
 	}
 	free(nums);
+	i = 0;
+	/*while(z_line[i])
+	{
+		z_line[i] = z_line[i] + 50;
+		i++;
+	}*/
 	return (1);
 }
 
@@ -60,7 +66,7 @@ int	read_file(t_fdf	*data, char *file_name)
 		fill_matrix(data->matrix_z[i], line);
 		free(line);
 		i++;
-	}	
+	}
 	close(fd);
 	data->matrix_z[i] = NULL;
 	return (1);

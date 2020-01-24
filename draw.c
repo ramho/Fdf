@@ -13,7 +13,7 @@
 #include "fdf.h"
 // 50 pix ca be a variable declared before, and say its (pix of my image)/#of colums
 
-int  draw_matrice(t_fdf *data)
+/*int  draw_matrice(t_fdf *data)
 {
 	int y;
 	int x;
@@ -47,9 +47,9 @@ int  draw_matrice(t_fdf *data)
 		i++;
 	}
 	return (1);
-}
+}*/
 
-/*int  draw_matrice(t_fdf *data)
+int  draw_matrice(t_fdf *data)
 {
 	int y;
 	int x;
@@ -63,18 +63,19 @@ int  draw_matrice(t_fdf *data)
 	while ( y <= height_pix)
 	{
 		x = 50;
+		j=0;
 		width_pix = data->width * x;
 		while(x <= width_pix)
 		{
-			breshenham(iso_x(x, y), iso_y(x,y, data->matrix_z[i][j]), iso_x(x, y), iso_y(x,y+50, data->matrix_z[i][j]), data);
-			breshenham(iso_x(x, y), iso_y(x,y, data->matrix_z[i][j]), iso_x(x+50, y), iso_y(x,y, data->matrix_z[i][j]), data);
+			breshenham(iso_x(x, y), iso_y(x,y, data->matrix_z[i][j]), iso_x(x, y+50), iso_y(x,y+50, data->matrix_z[i][j]), data);
+			breshenham(iso_x(x, y), iso_y(x,y, data->matrix_z[i][j]), iso_x(x+50, y), iso_y(x+50,y, data->matrix_z[i][j]), data);
 			if (y == height_pix)
 			{
-				breshenham(iso_x(x, y), iso_y(x,y+50, data->matrix_z[i][j]),iso_x(x+50, y), iso_y(x,y+50, data->matrix_z[i][j]), data);
+				breshenham(iso_x(x, y+50), iso_y(x,y+50, data->matrix_z[i][j]),iso_x(x+50, y+50), iso_y(x+50,y+50, data->matrix_z[i][j]), data);
 			}
 			if (x == width_pix)
 			{
-				breshenham(iso_x(x+50, y), iso_y(x,y, data->matrix_z[i][j]) , iso_x(x+50, y) , iso_y(x,y+50, data->matrix_z[i][j]), data);
+				breshenham(iso_x(x+50, y), iso_y(x+50,y, data->matrix_z[i][j]) , iso_x(x+50, y+50) , iso_y(x+50,y+50, data->matrix_z[i][j]), data);
 			}
 			x+= 50;
 			j++;
@@ -83,7 +84,7 @@ int  draw_matrice(t_fdf *data)
 		i++;
 	}
 	return (1);
-}*/
+}
 
 
 void	breshenham(int x0, int y0, int x1, int y1, t_fdf *data)
