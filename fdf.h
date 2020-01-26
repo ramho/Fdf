@@ -8,17 +8,30 @@
 #include "libft/libft.h"
 #include "minilibx_macos/mlx.h"
 
+typedef		struct	s_img
+{
+	void	*img_ptr;
+	int		*data;
+	int		size;
+	int		endian;
+	int		bpp;
+}					t_img;
+
 typedef		struct	s_fdf
 {
 	int	width;
 	int	height;
-	int	**matrix_z;
+
+	int **matrix_x;
+	int **matrix_y;
+	int **matrix_z;
 
 	void	*mlx_ptr;
 	void	*win_ptr;
+	t_img	*img;
 }					t_fdf;
 
-void		get_height_width(t_fdf *data, char *file_name);
+int		get_height_width(t_fdf *data, char *file_name);
 int			fill_matrix(int *z_line, char *line);
 int			read_file(t_fdf *data, char *file_name);
 void		breshenham(int x, int y, int x1, int y1, t_fdf *data);
