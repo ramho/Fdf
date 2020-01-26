@@ -8,6 +8,7 @@
 #include "libft/libft.h"
 #include "minilibx_macos/mlx.h"
 
+//structure for image display
 typedef		struct	s_img
 {
 	void	*img_ptr;
@@ -17,22 +18,31 @@ typedef		struct	s_img
 	int		bpp;
 }					t_img;
 
+
+//structure for windom and data
 typedef		struct	s_fdf
 {
 	int	width;
 	int	height;
 
-	int **matrix_x;
-	int **matrix_y;
-	int **matrix_z;
+	int **form;
+	int	*project;
 
 	void	*mlx_ptr;
 	void	*win_ptr;
 	t_img	*img;
 }					t_fdf;
 
-int		get_height_width(t_fdf *data, char *file_name);
-int			fill_matrix(int *z_line, char *line);
+//stucture for chained list if easier
+/*typedef		struct	s_matrice
+{
+	int	**form;
+	int *projectxy;
+	t_matrice	*next;
+}					t_matrice*/
+
+int			get_height_width(t_fdf *data, char *file_name);
+int			fill_matrix(t_fdf *data, char *line, int i);
 int			read_file(t_fdf *data, char *file_name);
 void		breshenham(int x, int y, int x1, int y1, t_fdf *data);
 int 		draw_matrice(t_fdf *data);
