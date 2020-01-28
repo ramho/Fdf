@@ -48,11 +48,11 @@ int		get_z(int *z_line, char *line, t_fdf *data)
 	if(!(nums = ft_strsplit(line, ' ')))
 		return (0);
 	i = 0;
-	z_line = malloc(sizeof(int) + data->width + 1);
+//	z_line = malloc(sizeof(int) + data->width + 1);
 	while(nums[i])
 	{
 		z_line[i] = ft_atoi(nums[i]);
-		//	printf("z_line = %d\n", z_line[i]);
+		printf("z_line = %d -- nums[i] = %s\n", z_line[i], nums[i]);
 		free(nums[i]);
 		i++;
 	}
@@ -100,11 +100,11 @@ int	read_file(t_fdf *data,char *file)
 		return(-2);
 
 	i = 0;
-	data->tab_z= malloc(sizeof(int**) + (data->width * data->height) + 1);
+	data->tab_z= malloc(sizeof(int**) * (data->width * data->height) + 1);
 	while((get_next_line(fd, &line)))
 	{
 		printf("i = %d && line = %s\n", i, line);
-		data->tab_z[i] = malloc(sizeof(int*) + data->width + 1);
+		data->tab_z[i] = malloc(sizeof(int*) * data->width + 1);
 		get_z(data->tab_z[i], line, data);
 		free(line);
 		for(j = 0; j < 11; j++)
