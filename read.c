@@ -6,7 +6,7 @@
 /*   By: rhoorntj <rhoorntj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 14:52:07 by rhoorntj          #+#    #+#             */
-/*   Updated: 2020/01/27 20:13:51 by rhoorntj         ###   ########.fr       */
+/*   Updated: 2020/01/29 13:02:25 by rhoorntj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,32 @@ void		fill_coordxyz(t_fdf *data)
 	int x;
 	int y;
 	int i;
-
+	int j = 0;//
+printf("enter fill coord\n");
 	y = 0;
 	i = 0;
-	data->coord = malloc(sizeof(int **) * (data->width * data->height) + 1);
-	//while( y < data->height)
-	//{
+	data->coord = malloc(sizeof(int *) * (data->width * data->height) + 1);
+	while( y < data->height)
+	{
 		x = 0;
 		while(x < data->width)
 		{
-		data->coord[i] = malloc(sizeof(int *) * 3);
-//		printf("data->coord[%d]-[%d],[%d],[%d]\n", i, x, y, data->tab_z[x][y]);
+			data->coord[i] = malloc(sizeof(int ) * 3);
+			printf("data->coord[%d] = [%d - %d - %d]\n\n", i, x, y, data->tab_z[y][x]);
 			data->coord[i][0] = x;
 			data->coord[i][1] = y;
-			data->coord[i][2] = data->tab_z[x][y];
+			printf("x= %d - y = %d, ||tab_z[%d]||\n",x,y, data->tab_z[y][x]);
+			data->coord[i][2] = data->tab_z[y][x];
+			free(data->tab_z[x]);
 			x++;
 			i++;
 		}
-	//	y++;
-	//	i++;
-//	}
+	//	printf("avant y++");
+		y++;
+		//i++;
+	//	printf("apres y++\n");
+	}
+	free(data->tab_z);
 }
 
 int		get_z(int *z_line, char *line, t_fdf *data)
@@ -48,11 +54,11 @@ int		get_z(int *z_line, char *line, t_fdf *data)
 	if(!(nums = ft_strsplit(line, ' ')))
 		return (0);
 	i = 0;
-//	z_line = malloc(sizeof(int) + data->width + 1);
+//	z_line = malloc(sizeof(int) * data->width + 1);
 	while(nums[i])
 	{
 		z_line[i] = ft_atoi(nums[i]);
-		printf("z_line = %d -- nums[i] = %s\n", z_line[i], nums[i]);
+//		printf("z_line = %d -- nums[i] = %s\n", z_line[i], nums[i]);
 		free(nums[i]);
 		i++;
 	}
@@ -103,12 +109,12 @@ int	read_file(t_fdf *data,char *file)
 	data->tab_z= malloc(sizeof(int**) * (data->width * data->height) + 1);
 	while((get_next_line(fd, &line)))
 	{
-		printf("i = %d && line = %s\n", i, line);
+	//	printf("i = %d && line = %s\n", i, line);
 		data->tab_z[i] = malloc(sizeof(int*) * data->width + 1);
 		get_z(data->tab_z[i], line, data);
 		free(line);
-		for(j = 0; j < 11; j++)
-			printf("tab[%d]\n", data->tab_z[i][j]);
+	//	for(j = 0; j < 11; j++)
+	//		printf("tab[%d]\n", data->tab_z[i][j]);
 		i++;
 	}
 	close(fd);
