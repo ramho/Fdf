@@ -6,7 +6,7 @@
 /*   By: rhoorntj <rhoorntj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 14:53:17 by rhoorntj          #+#    #+#             */
-/*   Updated: 2020/01/27 20:05:07 by rhoorntj         ###   ########.fr       */
+/*   Updated: 2020/01/29 17:01:43 by rhoorntj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef		struct	s_fdf
 	int width;
 	int	**coord;
 	int **tab_z;
+	int **coordpro;
 }					t_fdf;
 
 /*typedef		struct	s_img
