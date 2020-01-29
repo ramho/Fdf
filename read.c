@@ -6,7 +6,7 @@
 /*   By: rhoorntj <rhoorntj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 14:52:07 by rhoorntj          #+#    #+#             */
-/*   Updated: 2020/01/29 13:02:25 by rhoorntj         ###   ########.fr       */
+/*   Updated: 2020/01/29 15:03:50 by rhoorntj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,25 @@ void		fill_coordxyz(t_fdf *data)
 	int y;
 	int i;
 	int j = 0;//
-printf("enter fill coord\n");
+//printf("enter fill coord\n");
 	y = 0;
 	i = 0;
-	data->coord = malloc(sizeof(int *) * (data->width * data->height) + 1);
+	data->coord = malloc(sizeof(int **) * (data->width * data->height) + 1);
 	while( y < data->height)
 	{
 		x = 0;
 		while(x < data->width)
 		{
-			data->coord[i] = malloc(sizeof(int ) * 3);
-			printf("data->coord[%d] = [%d - %d - %d]\n\n", i, x, y, data->tab_z[y][x]);
+			data->coord[i] = malloc((sizeof(int* ) * 3));
+//			printf("data->coord[%d] = [%d - %d - %d]\n\n", i, x, y, data->tab_z[y][x]);
 			data->coord[i][0] = x;
 			data->coord[i][1] = y;
-			printf("x= %d - y = %d, ||tab_z[%d]||\n",x,y, data->tab_z[y][x]);
+//			printf("x= %d - y = %d, ||tab_z[%d]||\n",x,y, data->tab_z[y][x]);
 			data->coord[i][2] = data->tab_z[y][x];
-			free(data->tab_z[x]);
 			x++;
 			i++;
 		}
-	//	printf("avant y++");
+		free(data->tab_z[y]);
 		y++;
 		//i++;
 	//	printf("apres y++\n");
@@ -53,6 +52,8 @@ int		get_z(int *z_line, char *line, t_fdf *data)
 
 	if(!(nums = ft_strsplit(line, ' ')))
 		return (0);
+
+	//printf("la chaine vaut ")
 	i = 0;
 //	z_line = malloc(sizeof(int) * data->width + 1);
 	while(nums[i])
@@ -120,6 +121,6 @@ int	read_file(t_fdf *data,char *file)
 	close(fd);
 	data->tab_z[i] = NULL;
 	fill_coordxyz(data);
-		printf("test out of fill coordxyz\n");
+//		printf("test out of fill coordxyz\n");
 	return(1);
 }
