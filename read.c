@@ -6,60 +6,52 @@
 /*   By: rhoorntj <rhoorntj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 14:52:07 by rhoorntj          #+#    #+#             */
-/*   Updated: 2020/01/29 15:03:50 by rhoorntj         ###   ########.fr       */
+/*   Updated: 2020/02/10 12:15:55 by rhoorntj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void		fill_coordxyz(t_fdf *data)
+int	fill_coordxyz(t_fdf *data)
 {
 	int x;
 	int y;
 	int i;
-	int j = 0;//
-//printf("enter fill coord\n");
-	y = 0;
+
+	y = -1;
 	i = 0;
-	data->coord = malloc(sizeof(int **) * (data->width * data->height) + 1);
-	while( y < data->height)
+	if(!(data->coord = malloc(sizeof(int **) *
+		(data->width * data->height) + 1)))
+		return(-1);
+	while (++y < data->height)
 	{
-		x = 0;
-		while(x < data->width)
+		x = -1;
+		while (++x < data->width)
 		{
-			data->coord[i] = malloc((sizeof(int* ) * 3));
-//			printf("data->coord[%d] = [%d - %d - %d]\n\n", i, x, y, data->tab_z[y][x]);
+			if(!(data->coord[i] = malloc((sizeof(int *) * 3))))
+				return(-1);
 			data->coord[i][0] = x;
 			data->coord[i][1] = y;
-//			printf("x= %d - y = %d, ||tab_z[%d]||\n",x,y, data->tab_z[y][x]);
 			data->coord[i][2] = data->tab_z[y][x];
-			x++;
 			i++;
 		}
 		free(data->tab_z[y]);
-		y++;
-		//i++;
-	//	printf("apres y++\n");
 	}
 	free(data->tab_z);
+	return(1);
 }
 
 int		get_z(int *z_line, char *line, t_fdf *data)
 {
-	char **nums;
-	int i;
-	int j = 0;
+	char	**nums;
+	int		i;
 
-	if(!(nums = ft_strsplit(line, ' ')))
+	if (!(nums = ft_strsplit(line, ' ')))
 		return (0);
-
-	//printf("la chaine vaut ")
 	i = 0;
-//	z_line = malloc(sizeof(int) * data->width + 1);
-	while(nums[i])
+	while (nums[i])
 	{
 		z_line[i] = ft_atoi(nums[i]);
-//		printf("z_line = %d -- nums[i] = %s\n", z_line[i], nums[i]);
 		free(nums[i]);
 		i++;
 	}
@@ -67,24 +59,23 @@ int		get_z(int *z_line, char *line, t_fdf *data)
 	return (1);
 }
 
-int get_height_width(t_fdf *data, char *file)
+int		get_height_width(t_fdf *data, char *file)
 {
-	int fd;
-	int tmp;
-	char *line;
+	int		fd;
+	int		tmp;
+	char	*line;
 
-	if((fd=open(file, O_RDONLY)) == -1)
+	if ((fd = open(file, O_RDONLY)) == -1)
 		return(0);
-
-	get_next_line(fd, &line);
+	get_next_line(fd, &line); // protect ?
 	data->width = ft_countwords(line, ' ');
 	free(line);
 	data->height = 1;
-	while(get_next_line(fd, &line))
+	while (get_next_line(fd, &line))
 	{
 		tmp = data->width;
 		data->width = ft_countwords(line, ' ');
-		if(tmp != data->width)
+		if (tmp != data->width)
 			return(0);
 		data->height++;
 		free(line);
@@ -93,34 +84,31 @@ int get_height_width(t_fdf *data, char *file)
 	return(1);
 }
 
-
-int	read_file(t_fdf *data,char *file)
+int		read_file(t_fdf *data, char *file)
 {
-	int fd;
-	int i;
-	char *line;
-	int j;
+	int		fd;
+	int		i;
+	char	*line;
 
-	if(!get_height_width(data, file))
+	if (!get_height_width(data, file))
 		return(-1);
-	if((fd = open(file, O_RDONLY)) == -1)
-		return(-2);
-
+	if ((fd = open(file, O_RDONLY)) == -1)
+		return(-1);
 	i = 0;
-	data->tab_z= malloc(sizeof(int**) * (data->width * data->height) + 1);
-	while((get_next_line(fd, &line)))
+	if(!(data->tab_z = malloc(sizeof(int**) *
+		(data->width * data->height) + 1)))
+		return(-1);
+	while ((get_next_line(fd, &line)))
 	{
-	//	printf("i = %d && line = %s\n", i, line);
-		data->tab_z[i] = malloc(sizeof(int*) * data->width + 1);
+		if(!(data->tab_z[i] = malloc(sizeof(int*) * data->width + 1)))
+			return(-1);
 		get_z(data->tab_z[i], line, data);
 		free(line);
-	//	for(j = 0; j < 11; j++)
-	//		printf("tab[%d]\n", data->tab_z[i][j]);
 		i++;
 	}
 	close(fd);
 	data->tab_z[i] = NULL;
-	fill_coordxyz(data);
-//		printf("test out of fill coordxyz\n");
+	if(!fill_coordxyz(data))
+		return(-1);
 	return(1);
 }
