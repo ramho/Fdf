@@ -6,64 +6,82 @@
 /*   By: rhoorntj <rhoorntj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/29 15:39:23 by rhoorntj          #+#    #+#             */
-/*   Updated: 2020/02/10 15:01:58 by rhoorntj         ###   ########.fr       */
+/*   Updated: 2020/02/12 15:13:50 by rhoorntj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	projection_coord(t_fdf *data)
+int	projection_coord(t_fdf *data)
 {
 	int i;
 
 	i = 0;
-	data->crdpro = malloc(sizeof(int **) * (data->width * data->height) + 1);
+	if(!(data->crdpro = malloc(sizeof(int **) *
+		(data->width * data->height) + 1)))
+		return(-1);
 	while (i < data->height * data->width)
 	{
-		data->crdpro[i] = malloc((sizeof(int *) * 3));
-		data->crdpro[i][0] = data->coord[i][0] * data->pix + OFFSET;
-		data->crdpro[i][1] = data->coord[i][1] * data->pix + OFFSET;
-		++i;
-	}
-}
-
-void	projection_iso(t_fdf *data)
-{
-	int i;
-
-	i = 0;
-	data->crdpro = malloc(sizeof(int **) * (data->width * data->height) + 1);
-	while (i < data->height * data->width)
-	{
-		//printf("in iso coord %d = [%f - %f]\n",i,data->coord[i][0], data->coord[i][1] );
-		data->crdpro[i] = malloc((sizeof(int *) * 3));
-		data->crdpro[i][0] = ((0.5 * data->coord[i][0]) - (0.5 * data->coord[i][1]));
-		data->crdpro[i][1] = (-1 * data->coord[i][2] + ((0.5/2) * data->coord[i][0]) + ((0.5/2) * data->coord[i][1]));
-		data->crdpro[i][0] = data->crdpro[i][0] * data->pix + OFFSET;
-		data->crdpro[i][1] = data->crdpro[i][1] * data->pix + OFFSET;
-		printf("in iso crdppo %d = [%f - %f]\n",i, data->crdpro[i][0] , data->crdpro[i][1]);
-		++i;
-	}
-	printf("out of iso\n");
-}
-
-void	projection_parallele(t_fdf *data)
-{
-	int i;
-
-	i = 0;
-	data->crdpro = malloc(sizeof(int **) * (data->width * data->height) + 1);
-	while (i < data->height * data->width)
-	{
-		data->crdpro[i] = malloc((sizeof(int *) * 3));
-		data->crdpro[i][0] = data->coord[i][0] + 0.5 * data->coord[i][2]
-		/*+ OFFSET*/;
-		data->crdpro[i][1] = data->coord[i][1] + (0.5/2) *data->coord[i][2]
-		/*+ OFFSET*/;
-		data->crdpro[i][0] = data->crdpro[i][0] * data->pix + OFFSET;
-		data->crdpro[i][1] = data->crdpro[i][1] * data->pix + OFFSET;
+		if(!(data->crdpro[i] = malloc((sizeof(int *) * 3))))
+			return (-1);
+		data->crdpro[i][0] = data->coord[i][0] * data->pix + OFFSET_X;
+		data->crdpro[i][1] = data->coord[i][1] * data->pix + OFFSET_Y;
 		i++;
 	}
+	draw_matrice(data);
+	return(1);
+}
+
+int 	projection_iso(t_fdf *data)
+{
+	int i;
+
+	i = 0;
+	if(!(data->crdpro = malloc(sizeof(int **) *
+		(data->width * data->height) + 1)))
+		return(-1);
+	while (i < data->height * data->width)
+	{
+		if(!(data->crdpro[i] = malloc((sizeof(int *) * 3))))
+			return (-1);
+		data->crdpro[i][0] = ((0.5 * data->coord[i][0]) -
+			(0.5 * data->coord[i][1]));
+		data->crdpro[i][1] = (-1 * data->coord[i][2] +
+			((0.5/2) * data->coord[i][0]) + ((0.5/2) * data->coord[i][1]));
+		data->crdpro[i][0] = data->crdpro[i][0] * data->pix + OFFSET_Ix;
+		data->crdpro[i][1] = data->crdpro[i][1] * data->pix + OFFSET_Iy;
+		i++;
+	}
+	if (data->pixel == 0)
+		draw_matrice(data);
+	if (data->pixel == 3)
+		draw_pixel(data);
+	return(1);
+}
+
+int		projection_parallele(t_fdf *data)
+{
+	int i;
+
+	i = 0;
+	if(!(data->crdpro = malloc(sizeof(int **) *
+	(data->width * data->height) + 1)))
+		return(-1);
+	while (i < data->height * data->width)
+	{
+		if(!(data->crdpro[i] = malloc((sizeof(int *) * 3))))
+			return (-1);
+		data->crdpro[i][0] = data->coord[i][0] + 0.5 * data->coord[i][2];
+		data->crdpro[i][1] = data->coord[i][1] + (0.5/2) *data->coord[i][2];
+		data->crdpro[i][0] = data->crdpro[i][0] * data->pix + OFFSET_X;
+		data->crdpro[i][1] = data->crdpro[i][1] * data->pix + OFFSET_Y;
+		i++;
+	}
+	if (data->pixel == 0)
+		draw_matrice(data);
+	else if (data->pixel == 3)
+		draw_pixel(data);
+	return(1);
 }
 
 void	draw_matrice(t_fdf *data)
@@ -79,12 +97,16 @@ void	draw_matrice(t_fdf *data)
 		x = 0;
 		while(x <= data->width - 1)
 		{
+			//printf (" IN DRAW x0 %f y0 %f x1 %f y1 %f\n", data->crdpro[data->i][0], data->crdpro[data->i][1], data->crdpro[data->i + 1][0], data->crdpro[data->i + 1][1]);
 			if (data->coord[data->i][0] < data->width - 1)
-				breshenham(data->crdpro[data->i][0], data->crdpro[data->i][1], data->crdpro[data->i + 1][0], data->crdpro[data->i + 1][1],data);
-				//mlx_pixel_put(data->mlx_ptr, data->win_ptr,data->crdpro[data->i][0] , data->crdpro[data->i][1] , colors(data));
+			{
+				//color = select_color(data);
+				//breshenhamx(data->crdpro[data->i][0], data->crdpro[data->i][1], data->crdpro[data->i + 1][0], data->crdpro[data->i + 1][1],data);
+				breshenhamx(data);
+			}
 			if (data->coord[data->i][1] < data->height - 1)
-				breshenham(data->crdpro[data->i][0], data->crdpro[data->i][1], data->crdpro[data->i + data->width][0], data->crdpro[data->i + data->width][1], data);
-			free(data->crdpro[data->i]);
+				//breshenhamy(data->crdpro[data->i][0], data->crdpro[data->i][1], data->crdpro[data->i + data->width][0], data->crdpro[data->i + data->width][1], data);
+				breshenhamy(data);
 			x++;
 			data->i++;
 		}
@@ -92,43 +114,26 @@ void	draw_matrice(t_fdf *data)
 	}
 }
 
-int	colors(t_fdf *data)
+void	draw_pixel(t_fdf *data)
 {
-	if(data->coord[data->i][2] > 0)
-		return(0x2A2787);
-	else if(data->coord[data->i][2] == 0)
-			return(0xF80822);
-	else if(data->coord[data->i][2] < 0)
-		return(0x0A7369);
-	return(0);
-}
+	int y;
+	int x;
 
-void	breshenham(double x0, double y0, double x1, double y1, t_fdf *data)
-{
-
-	data->dx = abs((int)x1 - (int)x0);
-	data->sx = x0 < x1 ? 1 : -1;
-	data->dy = abs((int)y1 - (int)y0);
-	data->sy = y0 < y1 ? 1 : -1;
-	data->err = (data->dx > data->dy ? data->dx : -data->dy) * 0.5;
-	y0 = (int)y0;
-	x0 = (int)x0;
-	y1 = (int)y1;
-	x1 = (int)x1;
- 	while (x0 != x1 || y0 != y1)
+	data->i = 0;
+	y = 0;
+	while ( y <= data->height - 1)
 	{
 
-		mlx_pixel_put(data->mlx_ptr, data->win_ptr, x0 , y0 , colors(data));
-		data->e2 = data->err;
-		if (data->e2 > -data->dx)
+		x = 0;
+		while(x <= data->width - 1)
 		{
-			data->err -= data->dy;
-			x0 += data->sx;
+			if (data->coord[data->i][0] < data->width - 1)
+				mlx_pixel_put(data->mlx_ptr, data->win_ptr, data->coord[data->i][0], data->coord[data->i][1], colors(data));
+			if (data->coord[data->i][1] < data->height - 1)
+				mlx_pixel_put(data->mlx_ptr, data->win_ptr, data->coord[data->i][0], data->coord[data->i][1], colors(data));
+			x++;
+			data->i++;
 		}
-		if (data->e2 < data->dy)
-		{
-			data->err += data->dx;
-			y0 += data->sy;
-		}
+		y++;
 	}
 }
