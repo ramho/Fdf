@@ -6,7 +6,7 @@
 /*   By: rhoorntj <rhoorntj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 14:53:17 by rhoorntj          #+#    #+#             */
-/*   Updated: 2020/02/12 15:08:58 by rhoorntj         ###   ########.fr       */
+/*   Updated: 2020/02/13 18:53:16 by rhoorntj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <math.h>
-#include "libft/libft.h"
-#include "minilibx_macos/mlx.h"
+#include "../libft/libft.h"
+#include "../minilibx_macos/mlx.h"
 
 # define W_WIDTH 1500
 # define W_HEIGHT 1000
@@ -60,6 +60,7 @@ typedef		struct	s_fdf
 	int 		p;
 	int 		pixel;
 	int 		col;
+	int 		color;
 	double 		pix;
 
 	int 		height;
@@ -70,6 +71,8 @@ typedef		struct	s_fdf
 
 	void		*mlx_ptr;
 	void		*win_ptr;
+
+	char 		*img_str;
 
 	t_img		img;
 
@@ -82,11 +85,18 @@ typedef		struct	s_fdf
 }					t_fdf;
 
 /*
+** functions of main.c
+*/
+void		free_data(t_fdf *data);
+// int 	free_error(t_fdf *data, int i);
+int 	main(int ac, char **av);
+
+/*
 ** functions of read.c
 */
 int		read_file(t_fdf *data,char *file);
 int		get_height_width(t_fdf *data, char *file);
-int		get_z(int *z_line, char *line, t_fdf *data);
+int		get_z(int *z_line, char *line);
 int		fill_coordxyz(t_fdf *data);
 
 /*
@@ -116,11 +126,9 @@ void	init_map(t_fdf *data);
 /*
 ** functions of line_n_color
 */
-int		colors(t_fdf *data);
 void	breshenhamx(t_fdf *data);
 void	breshenhamy(t_fdf *data);
-// void	breshenhamx(int x0, int y0, int x1, int y1, t_fdf *data);
-// void	breshenhamy(int x0, int y0, int x1, int y1, t_fdf *data);
-// void	breshenham(int x0, int y0, int x1, int y1, t_fdf *data);
+int 	select_colorx(t_fdf *data);
+int 	select_colory(t_fdf *data);
 
 #endif
