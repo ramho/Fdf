@@ -1,42 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   projection.c                                       :+:      :+:    :+:   */
+/*   ft_strsub.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhoorntj <rhoorntj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/24 13:28:20 by rhoorntj          #+#    #+#             */
-/*   Updated: 2020/01/24 15:46:09 by rhoorntj         ###   ########.fr       */
+/*   Created: 2019/04/23 18:45:35 by rhoorntj          #+#    #+#             */
+/*   Updated: 2020/02/17 12:50:08 by rhoorntj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "libft.h"
 
-int	iso_x(int x, int y)
+char	*ft_strsub(char const *s, unsigned int start, size_t len)
 {
-	int x1;
+	char	*str;
+	size_t	i;
 
-	x1= (x - y) * cos(0.8);
-	printf("x1 in iso %d\n", x1);
-	return(x1);
+	if (s == NULL)
+		return (NULL);
+	str = malloc(sizeof(char) * (len + 1));
+	if (str == NULL)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		str[i] = s[i + start];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
 }
-
-int	iso_y(int x,int y, int z)
-{
-	int y1;
-	printf("z = %d\n", z);
-	y1= (x + y) * sin(0.5) - z;
-	return(y1);
-}
-
-/*int 	orthographic(t_fdf *data)
-{
-	x` = x;
-	y` = y;
-}*/
-
-/*int		perspective(t_fdf *data)
-{
-	x`=
-	y`=
-}*/
